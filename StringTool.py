@@ -1,18 +1,19 @@
 
 
 class StringTool:
-    def findAllStrPos(self,mainStr, strToFind):
-        """Returns all positions within mainStr
-        that the strToFind is found"""
+    def findAllStrPos(self,mainStr, strToFind,IsCaseSesative = False):
+        """Returns all the strToFind positions within mainStr"""
 
         all_subStr_positions_list = []
         not_found_ch = 'www'.find('e')
 
         print('The entered string is:',mainStr)
-        #converting the main str to lower case string using casefold for more aggressive lower action
-        #in order to work with no case sensative"
-        mainStr = mainStr.casefold()
-        strToFind = strToFind.casefold()
+        if IsCaseSesative == True:
+            #converting the main str to lower case string using casefold for more aggressive lower action
+            #in order to work with no case sensative"
+            mainStr = mainStr.casefold()
+            strToFind = strToFind.casefold()
+            
         found_abs_pos = not_found_ch
         next_pos = 0
 

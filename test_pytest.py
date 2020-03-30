@@ -25,3 +25,9 @@ def test_two_subStr_found():
     pos_list = tool.findAllStrPos('the boy is here, boy', 'boy')
     assert pos_list == [4,17]
 
+
+def empty_str():
+    tool = StringTool.StringTool()
+    pos_list = tool.findAllStrPos('', 'boy')
+    assert pos_list == []
+
