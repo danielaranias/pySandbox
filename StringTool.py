@@ -1,7 +1,7 @@
 
 
 class StringTool:
-    def findAllStrPos(self,mainStr, strToFind,IsCaseSesative = False):
+    def findAllStrPos(self,mainStr:'the input string to work on', strToFind:'the string to find within the mainStr',IsCaseSesative = False) -> 'list of the found positions':
         """Returns all the strToFind positions within mainStr"""
 
         all_subStr_positions_list = []
@@ -13,7 +13,7 @@ class StringTool:
             #in order to work with no case sensative"
             mainStr = mainStr.casefold()
             strToFind = strToFind.casefold()
-            
+
         found_abs_pos = not_found_ch
         next_pos = 0
 
@@ -31,4 +31,46 @@ class StringTool:
             found_abs_pos = mainStr[next_pos:].find(strToFind)
 
         return all_subStr_positions_list
-                
+
+
+    def tokenizedSeq(self,seqList:'the list to tokenize each charecture')->'the tokenized Dict':
+        tokenized_dict = {}
+
+        #running on all charectures in the sequence and building a Dict
+        for ch in seqList:
+            if tokenized_dict.get(ch) == None:
+                tokenized_dict[ch] = 1
+            else:
+                #adding one more to the counting number
+                tokenized_dict[ch]+=1 
+            
+        return tokenized_dict
+
+
+    def isSeqDNA(self,seqList:'the sequence to check on',DnaThreshold:'the precentage that above that it is a DNA'=90)->'return True if the majoruty of the Seq are DNA based':
+        res = False
+
+        #dnaBased = {'A':0,'C':0,'T':0,'G':0}
+        dna_based = ['A','C','T','G']
+        tokenized_dict = self.tokenizedSeq(seqList)
+        total_other_ch_seq = 0
+        total_dna_base = 0
+
+        for ch in tokenized_dict:
+            if ch in dna_based:
+                total_dna_base += tokenized_dict[ch]
+            else:
+                total_other_ch_seq += tokenized_dict[ch] 
+
+        if tokenized_dict.__len__() > 0:
+            precentage = (total_dna_base/(total_dna_base + total_other_ch_seq))*100
+        else:
+            precentage = 0
+
+        if precentage >= DnaThreshold:
+            res = True
+        else:
+            res = False
+
+
+        return res           
