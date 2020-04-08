@@ -46,27 +46,36 @@ class StringTool:
             
         return tokenized_dict
 
+    def GetPrecentageOfCharecturesInSeq(self, charectureList:'the charecture List to look on the seq',seqList:'the sequence to check on')->'return the precentage':
+        """Getting the precentage of a charecture list out of a sequence"""
 
-    def isSeqDNA(self,seqList:'the sequence to check on',DnaThreshold:'the precentage that above that it is a DNA'=90)->'return True if the majoruty of the Seq are DNA based':
-        res = False
-
-        #dnaBased = {'A':0,'C':0,'T':0,'G':0}
-        dna_based = ['A','C','T','G']
+        precentage = 0.0
         tokenized_dict = self.tokenizedSeq(seqList)
         total_other_ch_seq = 0
-        total_dna_base = 0
+        total_charectureList_base = 0
 
         for ch in tokenized_dict:
-            if ch in dna_based:
-                total_dna_base += tokenized_dict[ch]
+            if ch in charectureList:
+                total_charectureList_base += tokenized_dict[ch]
             else:
                 total_other_ch_seq += tokenized_dict[ch] 
 
         if tokenized_dict.__len__() > 0:
-            precentage = (total_dna_base/(total_dna_base + total_other_ch_seq))*100
+            precentage = (total_charectureList_base/(total_charectureList_base + total_other_ch_seq))*100
         else:
             precentage = 0
 
+        return precentage           
+
+
+    def isSeqDNA(self,seqList:'the sequence to check on',DnaThreshold:'the precentage that above that it is a DNA'=90)->'return True if the majoruty of the Seq are DNA based':
+        """ A practical getter to verify if a sequnce is a DNA or not according to a given threashold"""
+
+        res = False
+        precentage = 0.0
+        dna_based = ['A','C','T','G']
+        
+        precentage = self.GetPrecentageOfCharecturesInSeq(dna_based,seqList)
         if precentage >= DnaThreshold:
             res = True
         else:
@@ -74,3 +83,5 @@ class StringTool:
 
 
         return res           
+
+    
