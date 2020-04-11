@@ -74,40 +74,43 @@ class FastaToBam():
         fastqHeader = '@'
         fastqData = {} #header : seq
         last_header_title =''
-        fastq_states = ['SEQ_ID','SEQ','SEQ_ID_VERFICATION','SEQ_ENCODE']
-        current_fastq_state = 0 #initial state
+        fastq_states = ['SEQ_ID','SEQ_DATA','SEQ_ID_VERFICATION','SEQ_ENCODE']
+        current_fastq_state = fastq_states[0] #initial state
 
         listOfLists = self.read_fasta_file(fileNamePath)
+
+        #the data is all fields except the SEQ_ID
+        data_states = fastq_states[1:]
         data = ['','','']
 
         for line in listOfLists:
             #finding the header
-            if current_fastq_state == 0 and line.find(fastqHeader) != -1 :
+            if current_fastq_state == 'SEQ_ID' and line.find(fastqHeader) != -1 :
                 #just adding the header
                 last_header_title = line
                 fastqData[line] = data
                 #increament the state
-                #pos = (current_fastq_state +1)%fastq_states.__len__()
-                current_fastq_state = (current_fastq_state +1)%fastq_states.__len__()
+                current_fastq_state = fastq_states[(fastq_states.index(current_fastq_state) +1)%fastq_states.__len__()]
 
             # raw data    
-            elif current_fastq_state == 1:
-                data[0] = line
+            elif current_fastq_state == 'SEQ_DATA':
+                data[data_states.index(current_fastq_state)] = line
                 fastqData[last_header_title] = data
                 #increament the state
-                current_fastq_state = (current_fastq_state +1)%fastq_states.__len__()
+                current_fastq_state = fastq_states[(fastq_states.index(current_fastq_state) +1)%fastq_states.__len__()]
 
             #SEQ_ID verification
-            elif current_fastq_state == 2:
-                data[1]=line
+            elif current_fastq_state == 'SEQ_ID_VERFICATION':
+                data[data_states.index(current_fastq_state)] = line
                 #increament the state
-                current_fastq_state = (current_fastq_state +1)%fastq_states.__len__()
+                current_fastq_state = fastq_states[(fastq_states.index(current_fastq_state) +1)%fastq_states.__len__()]
 
             #SEQ ENCODE 
-            elif current_fastq_state == 3:
-                data[2]=line
+            elif current_fastq_state == 'SEQ_ENCODE':
+                data[data_states.index(current_fastq_state)] = line
                 #increament the state
-                current_fastq_state = (current_fastq_state +1)%fastq_states.__len__()
+                current_fastq_state = fastq_states[(fastq_states.index(current_fastq_state) +1)%fastq_states.__len__()]
+                #initilazing the data for next round
                 data = ['','','']
 
         return fastqData
