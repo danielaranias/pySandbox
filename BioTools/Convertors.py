@@ -13,23 +13,22 @@ class FastaToBam():
         lines = []
 
         with open(fileNamePath, 'r') as file_handle:
-            lines = file_handle.readlines()
-            #print(lines)
+            lines = file_handle.readlines()        
 
         return  lines
 
-    def isItValidFastaFile(self,listOfLists)-> 'return True or Flase':
+    
+    def FastaBuilderFromFile(self,fileNamePath)-> 'return the multi fasta dict':
         """
         check if there is fasta header ('>') or not
         """
-        res = False
         import StringTool
-        #strTool = StringTool.StringTool() 
+
         fastaHeader = '>'
         fastaFormatData = {} #header : seq
         last_header_title =''
-        #header_was_found = False
-        #seq_data = ''
+
+        listOfLists = self.read_fasta_file(fileNamePath)
 
         for line in listOfLists:
             if line.find(fastaHeader) != -1 :
@@ -41,8 +40,26 @@ class FastaToBam():
                 if last_header_title != '':
                     fastaFormatData[last_header_title] += line
 
-        
-        if fastaFormatData != {}:
-            res = True 
+        return fastaFormatData
 
-        return res
+    def FastaBuilderFromLists(self,listOfLists)-> 'return the fast multi dict':
+        """
+        check if there is fasta header ('>') or not
+        """
+        import StringTool
+
+        fastaHeader = '>'
+        fastaFormatData = {} #header : seq
+        last_header_title =''
+
+        for line in listOfLists:
+            if line.find(fastaHeader) != -1 :
+                #just adding the header
+                last_header_title = line
+                fastaFormatData[line] = ''
+            else:
+                #adding the data
+                if last_header_title != '':
+                    fastaFormatData[last_header_title] += line
+
+        return fastaFormatData

@@ -19,12 +19,19 @@ def test_reading_non_empty_Fasta_file():
     lines = fasta_to_bam.read_fasta_file(fasta_file)
     assert lines != []
 
-def test_non_valid_fasta_format():
+def test_building_fasta_from_non_valid_fasta_seq():
     listOfLists = ['ashcfcgf','jghh']
-    res = fasta_to_bam.isItValidFastaFile(listOfLists)
-    assert res == False
+    fasta_dict = fasta_to_bam.FastaBuilderFromLists(listOfLists)
+    assert fasta_dict == {}
 
-def test_valid_fasta_format():
+def test_building_fasta_from_valid_fasta_seq():
     listOfLists = ['ashcfcgf','> first header','jghh','> second header','ASADS','SDSD']
-    res = fasta_to_bam.isItValidFastaFile(listOfLists)
-    assert res == True
+    fasta_dict = fasta_to_bam.FastaBuilderFromLists(listOfLists)
+    assert fasta_dict == {'> first header':'jghh','> second header':'ASADSSDSD'}
+
+
+def test_building_fasta_from_valid_fasta_file():
+    
+    fasta_file = FastaFolderPath + '/validFasta.fna'
+    fasta_dict = fasta_to_bam.  FastaBuilderFromFile(fasta_file)
+    assert fasta_dict != {}
