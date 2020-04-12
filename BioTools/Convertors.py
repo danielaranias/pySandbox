@@ -1,15 +1,15 @@
 
 
-class FastaToBam():
+class Fasta():
     """
-    converting FASTA format to BAM format
+    Manipulate FASTA format - Read/TBD
     """
 
     def __init__(self):
         """ Constructor """
         pass
 
-    def read_fasta_file(self,fileNamePath:'the path to the fasta file'='')->'return the list of lines':
+    def read_file_data(self,fileNamePath:'the path to the fasta file'='')->'return the list of lines':
         lines = []
 
         with open(fileNamePath, 'r') as file_handle:
@@ -18,7 +18,7 @@ class FastaToBam():
         return  lines
 
     
-    def FastaBuilderFromFile(self,fileNamePath)-> 'return the multi fasta dict':
+    def FromFileToSeqDict(self,fileNamePath)-> 'return the multi fasta dict':
         """
         check if there is fasta header ('>') or not
         """
@@ -28,7 +28,7 @@ class FastaToBam():
         fastaFormatData = {} #header : seq
         last_header_title =''
 
-        listOfLists = self.read_fasta_file(fileNamePath)
+        listOfLists = self.read_file_data(fileNamePath)
 
         for line in listOfLists:
             if line.find(fastaHeader) != -1 :
@@ -42,7 +42,7 @@ class FastaToBam():
 
         return fastaFormatData
 
-    def FastaBuilderFromLists(self,listOfLists)-> 'return the fast multi dict':
+    def FromListsToSeqDict(self,listOfLists)-> 'return the fast multi dict':
         """
         check if there is fasta header ('>') or not
         """
@@ -64,8 +64,25 @@ class FastaToBam():
 
         return fastaFormatData
 
-   
-    def FastqBuilderFromFile(self,fileNamePath)-> 'return the multi fasta dict':
+
+class Fastq():
+    """
+    Manipulate FASTA format - Read/TBD
+    """
+
+    def __init__(self):
+        """ Constructor """
+        pass
+
+    def read_file_data(self,fileNamePath:'the path to the fasta file'='')->'return the list of lines':
+        lines = []
+
+        with open(fileNamePath, 'r') as file_handle:
+            lines = file_handle.readlines()        
+
+        return  lines
+
+    def FromFileToSeqDict(self,fileNamePath)-> 'return the multi fasta dict':
         """
         check if there is fasta header ('>') or not
         """
@@ -77,7 +94,7 @@ class FastaToBam():
         fastq_states = ['SEQ_ID','SEQ_DATA','SEQ_ID_VERFICATION','SEQ_ENCODE']
         current_fastq_state = fastq_states[0] #initial state
 
-        listOfLists = self.read_fasta_file(fileNamePath)
+        listOfLists = self.read_file_data(fileNamePath)
 
         #the data is all fields except the SEQ_ID
         data_states = fastq_states[1:]
